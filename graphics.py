@@ -7,8 +7,8 @@ class PlotObject:
         self.show_annotate = show_annotate
 
 
-    def plot_line(self, x_data, y_data, label=""):
-        plt.plot(x_data, y_data, label=label, color="r")
+    def plot_line(self, x_data, y_data, label="", marker=''):
+        plt.plot(x_data, y_data, label=label, color="r", marker=marker)
 
     
     def plot_errorbars(self, x_data, y_data, y_data_error, label=""):

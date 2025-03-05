@@ -14,7 +14,6 @@ class ClockInterface:
         self.mock_filepath = clock_settings["MOCKING_FILE"] #defines the filename/path of them mock data | type: str
         self.mock_dir = clock_settings["MOCK_DIR"] #defines the directory for all mock data sets | type: str
         self.warmup_time = clock_settings["WARMUP_TIME"]  #defines the hardware warmup time | type: int
-        self.zsweep = clock_settings["ZSWEEP"] #defines the operation (or not) of a zayman sweep
         self.setup() #set up the instruments
     
     """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """

@@ -1,13 +1,14 @@
 import pyvisa
 import time
 import sys
+import re
 
 class Instr:
-    def __init__(self, instr_settings, resource, baud_rate, setup_commands, term_commands, timeout=1000) -> None:
+    def __init__(self, resource, baud_rate, setup_commands, term_commands, instr_command_settings, timeout=1000) -> None:
         self.name = resource #sets the name of the resource, ie port
         self.setup_commands = setup_commands #sets the setup commands
         self.term_commands = term_commands #sets the termination commands
-        self.zsweep = instr_settings["ZSWEEP"] #TODO implement zsweep across command configs
+        self.query_mode = instr_command_settings["QUERY_MODE"] #sets the instrument settings
 
         try: #open the resource/device in pyVISA
             rm = pyvisa.ResourceManager() 
@@ -57,10 +58,19 @@ class Instr:
     # writes to hardware and checks if hardware agrees
     def write_and_verify(self, command, value): #TODO need to account for ZSWEEP
         self.write(command, value)
-        #TODO some of the power supply commands are different than the ones on the other devices. check ZSWEEP settings?
+
+        if self.query_mode == 1:
+            print(f"Command '{command}'")
+            if "OUTP" in command:
+
+                response = self.instr.query("SYST:STAT?")
+                print(self.name, "response ->", command, ": ", response)
+                return response
+            else:
+                response = self.instr.query(command.strip() + "?") #get response. The ? appended to the command tells the device we are trying to query, not write
+                print(self.name, "response ->", command, ": ", response) 
+                return response
+
         response = self.instr.query(command + "?") #get response. The ? appended to the command tells the device we are trying to query, not write
         print(self.name, "response ->", command, ": ", response) 
         return response
-
-        
-
